@@ -1,0 +1,27 @@
+<div class="page-header">
+  <h3> <%= @user.username %></h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <dl class="dl-horizontal">
+      <dt>Photos</dt>
+      <dd>
+        <% @user.photos.each do |photo| %>
+        <ul>
+          <li>
+            <img src="<%= photo.image %>" width="200">
+          </li>
+        </ul>
+        <% end %>
+      </dd>
+
+    </dl>
+
+    <div class="btn-group btn-group-justified">
+      <a href="/users" class="btn btn-primary">
+        Back
+      </a>
+    </div>
+  </div>
+</div>

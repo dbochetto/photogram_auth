@@ -1,0 +1,43 @@
+<div class="page-header">
+<div class="row">
+  <div class="col-sm-offset-2 col-sm-8">   
+    <a href="/photos/new" class="btn btn-default btn-block"> <i class="fa fa-plus"></i> </a>
+</div>
+</div>
+</div>
+
+
+<% @photos.each do |photo| %>
+<div class="row">
+  <div class="col-sm-offset-2 col-sm-8">   
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+         <a href="/users/<%= photo.user.id %>" > <%= photo.user.username %> </a> <small> <%= time_ago_in_words(photo.created_at) %> ago </small> </h3>
+      </div>
+      <div class="panel-body">
+        <a href="/photos/<%= photo.id %>" > <img src="<%= photo.image %>" class="img-responsive" > </a>
+        <ul class="media-list">
+          <% usernames = [] %>
+            <% photo.likes.each do |like| %>
+              <% usernames.push(like.user.username) %>
+              <% end %>
+          <div class="media-heading">
+            <i class="fa fa-heart-o"> </i> <%= usernames.to_sentence %>
+          </div>
+          <% photo.comments.each do |comment| %>
+          <li class="media">
+            <div class="media-left">
+              <a href="users/<%= photo.user.id %>"> <%= comment.user.username %> </a> <small class="text-muted"> <%= time_ago_in_words(comment.created_at) %> ago </small>
+            </div>
+          </li>
+          <li>
+              <%= comment.body %>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
