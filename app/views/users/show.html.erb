@@ -1,27 +1,82 @@
 <div class="page-header">
-  <h3> <%= @user.username %></h3>
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-8">   
+      <div class="jumbotron">
+        <h3> <%= @user.username %></h3>
+      </div>
+    </div>
+  </div>
+<div class="row">
+  <div class="col-sm-offset-2 col-sm-8">   
+    <a href="/photos/new" class="btn btn-default btn-block"> <i class="fa fa-plus"></i> </a>
+</div>
+</div>
 </div>
 
+<% @user.photos.each do |photo| %>
 <div class="row">
-  <div class="col-md-12">
-    <dl class="dl-horizontal">
-      <dt>Photos</dt>
-      <dd>
-        <% @user.photos.each do |photo| %>
-        <ul>
-          <li>
-            <img src="<%= photo.image %>" width="200">
+  <div class="col-sm-offset-2 col-sm-8">   
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+         <a href="/users/<%= photo.user.id %>" > <%= photo.user.username %> </a> <small> <%= time_ago_in_words(photo.created_at) %> ago </small> </h3>
+      </div>
+      <div class="panel-body">
+        <a href="/photos/<%= photo.id %>" > <img src="<%= photo.image %>" class="img-responsive" > </a>
+        <ul class="media-list">
+          <% usernames = [] %>
+            <% photo.likes.each do |like| %>
+              <% usernames.push(like.user.username) %>
+              <% end %>
+          <div class="media-heading">
+            <i class="fa fa-heart-o"> </i> <%= usernames.to_sentence %>
+          </div>
+          <% photo.comments.each do |comment| %>
+          <li class="media">
+            <div class="media-left">
+              <a href="users/<%= photo.user.id %>"> <%= comment.user.username %> </a> <small class="text-muted"> <%= time_ago_in_words(comment.created_at) %> ago </small>
+            </div>
           </li>
+          <li class="media">
+            <div class="media-left">
+              <%= comment.body %>
+            </div>
+          </li>
+          <% end %>
+
+<!-- New Form Code-->
+          <li class="media">
+            <div class="media-left">
+              <form action="/create_comment" method="post">
+                <!-- Hidden input for authenticity token to protect from forgery -->
+                <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+                <!-- Label and input for photo_id -->
+                <div class="form-group">
+                  <input type="hidden" id="photo_id" name="photo_id" placeholder="Photo" class="form-control" value="<%= photo.id %>">
+                </div>
+
+                <!-- Label and input for body -->
+                <div class="form-group">
+                  <textarea id="body" name="body" placeholder="Add a comment..." class="form-control" rows="1"><%= @comment.body %></textarea>
+                </div>
+
+                <!-- Label and input for user_id -->
+                <div class="form-group"> 
+                  <input type="hidden" id="user_id" name="user_id" placeholder="User" class="form-control" value="<%= current_user.id %>">
+                </div>
+
+                <button type = "hidden" class="btn btn-success">
+                  Create Comment
+                </button>
+              </form>
+            </div>
+          </li>
+
+<!-- End of New Form HTML-->
         </ul>
-        <% end %>
-      </dd>
-
-    </dl>
-
-    <div class="btn-group btn-group-justified">
-      <a href="/users" class="btn btn-primary">
-        Back
-      </a>
+      </div>
     </div>
   </div>
 </div>
+<% end %>
