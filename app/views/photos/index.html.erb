@@ -60,12 +60,8 @@
         <ul class="media-list">
           <% photo.comments.each do |comment| %>
           <li class="media">
-            <div class="media-left">
-              <a href="users/<%= photo.user.id %>"> <%= comment.user.username %> </a> <small class="text-muted"> <%= time_ago_in_words(comment.created_at) %> ago </small>
-            </div>
-          </li>
-          <li class="media">
-            <div class="media-left">
+            <div class="media-body">
+              <h6 class="media-heading"> <a href="users/<%= photo.user.id %>"> <%= comment.user.username %> </a> <small class="text-muted"> <%= time_ago_in_words(comment.created_at) %> ago </small> </h6>
               <%= comment.body %>
             </div>
           </li>
